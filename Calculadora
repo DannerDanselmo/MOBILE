@@ -1,0 +1,101 @@
+import React, { useState as useTheState } from 'react';
+import { StyleSheet as createStyles, View as ContainerView } from 'react-native';
+import { Provider as PaperProvider, Button as PaperButton, Text as PaperText } from 'react-native-paper';
+
+export default function App() {
+  const [currentInput, setCurrentInput] = useTheState('');
+
+  const appendCharacter = (val) => {
+    setCurrentInput(current => current + val);
+  };
+
+  const clearScreen = () => {
+    setCurrentInput('');
+  };
+
+  const calculateResult = () => {
+    try {
+      const computedValue = Function(`'use strict'; return (${currentInput})`)();
+      setCurrentInput(String(computedValue));
+    } catch {
+      setCurrentInput('Erro');
+    }
+  };
+
+  return (
+    <PaperProvider>
+      <ContainerView style={customStyles.mainWrapper}>
+        <ContainerView style={customStyles.screenBox}>
+          <PaperText style={customStyles.screenText}>{currentInput || '0'}</PaperText>
+        </ContainerView>
+
+        <ContainerView style={customStyles.buttonRow}>
+          <PaperButton mode="contained-tonal" style={customStyles.item} onPress={() => appendCharacter('7')}>7</PaperButton>
+          <PaperButton mode="contained-tonal" style={customStyles.item} onPress={() => appendCharacter('8')}>8</PaperButton>
+          <PaperButton mode="contained-tonal" style={customStyles.item} onPress={() => appendCharacter('9')}>9</PaperButton>
+          <PaperButton mode="contained" style={customStyles.item} onPress={() => appendCharacter('/')}>/</PaperButton>
+        </ContainerView>
+
+        <ContainerView style={customStyles.buttonRow}>
+          <PaperButton mode="contained-tonal" style={customStyles.item} onPress={() => appendCharacter('4')}>4</PaperButton>
+          <PaperButton mode="contained-tonal" style={customStyles.item} onPress={() => appendCharacter('5')}>5</PaperButton>
+          <PaperButton mode="contained-tonal" style={customStyles.item} onPress={() => appendCharacter('6')}>6</PaperButton>
+          <PaperButton mode="contained" style={customStyles.item} onPress={() => appendCharacter('*')}>*</PaperButton>
+        </ContainerView>
+
+        <ContainerView style={customStyles.buttonRow}>
+          <PaperButton mode="contained-tonal" style={customStyles.item} onPress={() => appendCharacter('1')}>1</PaperButton>
+          <PaperButton mode="contained-tonal" style={customStyles.item} onPress={() => appendCharacter('2')}>2</PaperButton>
+          <PaperButton mode="contained-tonal" style={customStyles.item} onPress={() => appendCharacter('3')}>3</PaperButton>
+          <PaperButton mode="contained" style={customStyles.item} onPress={() => appendCharacter('-')}>-</PaperButton>
+        </ContainerView>
+
+        <ContainerView style={customStyles.buttonRow}>
+          <PaperButton mode="contained-tonal" style={customStyles.item} onPress={() => appendCharacter('0')}>0</PaperButton>
+          <PaperButton mode="contained-tonal" style={customStyles.item} onPress={() => appendCharacter('.')}>.</PaperButton>
+          <PaperButton mode="contained" buttonColor="#d9534f" style={customStyles.item} onPress={clearScreen}>C</PaperButton>
+          <PaperButton mode="contained" style={customStyles.item} onPress={() => appendCharacter('+')}>+</PaperButton>
+        </ContainerView>
+
+        <ContainerView style={customStyles.buttonRow}>
+          <PaperButton mode="contained" buttonColor="#4caf50" style={customStyles.specialEqual} onPress={calculateResult}>=</PaperButton>
+        </ContainerView>
+      </ContainerView>
+    </PaperProvider>
+  );
+}
+
+const customStyles = createStyles({
+  mainWrapper: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 16,
+    backgroundColor: '#f5f5f5',
+  },
+  screenBox: {
+    backgroundColor: '#ffffff',
+    padding: 24,
+    borderRadius: 8,
+    marginBottom: 20,
+    alignItems: 'flex-end',
+    elevation: 2,
+  },
+  screenText: {
+    fontSize: 36,
+    fontWeight: 'bold',
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+  },
+  item: {
+    flex: 1,
+    marginHorizontal: 4,
+  },
+  specialEqual: {
+    flex: 1,
+    marginHorizontal: 4,
+    marginTop: 5,
+  },
+});
